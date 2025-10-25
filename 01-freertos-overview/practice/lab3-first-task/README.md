@@ -407,20 +407,30 @@ ESP_LOGI(TAG, "Task state: %s", state_names[state]);
 
 ## Checklist การทำงาน
 
-- [ ] สร้าง Task พื้นฐานสำเร็จ
-- [ ] เข้าใจ Task parameters และ return values
-- [ ] ทดสอบ Task priorities
-- [ ] ใช้ Task management APIs (suspend/resume)
-- [ ] แสดง runtime statistics
-- [ ] ทำแบบฝึกหัดครบ
+- [ / ] สร้าง Task พื้นฐานสำเร็จ
+- [ / ] เข้าใจ Task parameters และ return values
+- [ / ] ทดสอบ Task priorities
+- [ / ] ใช้ Task management APIs (suspend/resume)
+- [ / ] แสดง runtime statistics
+- [ / ] ทำแบบฝึกหัดครบ
 
 ## คำถามทบทวน
 
-1. เหตุใด Task function ต้องมี infinite loop?
+1. Task function ต้องมี infinite loop เพราะอะไร?
+เพื่อให้ Task ทำงานต่อเนื่อง ตลอดไป และ ป้องกัน Task สิ้นสุด (return) ซึ่งจะทำให้เกิดหน่วยความจำรั่ว (Memory Leak) ครับ
+
 2. ความหมายของ stack size ใน xTaskCreate() คืออะไร?
-3. ความแตกต่างระหว่าง vTaskDelay() และ vTaskDelayUntil()?
-4. การใช้ vTaskDelete(NULL) vs vTaskDelete(handle) ต่างกันอย่างไร?
-5. Priority 0 กับ Priority 24 อันไหนสูงกว่า?
+คือ ขนาดของหน่วยความจำ ที่จัดสรรไว้ให้ Task ใช้เก็บ ตัวแปรโลคัล และ บริบท ตอนสลับการทำงาน (Context Switch) ครับ (วัดเป็นจำนวน StackType_t)
+
+3. vTaskDelay() และ vTaskDelayUntil() ต่างกันอย่างไร?
+vTaskDelay() หน่วงเวลาแบบ สัมพัทธ์ (Relative) นับจากปัจจุบัน
+
+vTaskDelayUntil() หน่วงเวลาแบบ สัมบูรณ์ (Absolute) เพื่อให้ Task ทำงานเป็นรอบเวลาที่แม่นยำ (Periodic) ครับ
+
+4. vTaskDelete(NULL) vs vTaskDelete(handle) ต่างกันอย่างไร?
+vTaskDelete(NULL) คือการ ลบ Task ตัวเอง ที่กำลังรันอยู่
+
+vTaskDelete(handle) คือการ ลบ Task อื่น โดยใช้ Handle (ตัวชี้) ครับ
 
 ## บทสรุป
 
